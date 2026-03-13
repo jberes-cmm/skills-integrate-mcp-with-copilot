@@ -6,9 +6,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Handle "View My Activities" lookup
   myActivitiesBtn.addEventListener("click", async () => {
-    const email = document.getElementById("email").value.trim();
+    const emailInput = document.getElementById("email");
+    const email = emailInput.value.trim();
     if (!email) {
       myActivitiesList.innerHTML = "<p class='error'>Please enter your email above first.</p>";
+      myActivitiesList.classList.remove("hidden");
+      return;
+    }
+    if (!emailInput.checkValidity()) {
+      // Trigger built-in browser validation UI (if available)
+      if (typeof emailInput.reportValidity === "function") {
+        emailInput.reportValidity();
+      }
+      myActivitiesList.innerHTML = "<p class='error'>Please enter a valid email address above first.</p>";
       myActivitiesList.classList.remove("hidden");
       return;
     }
@@ -165,10 +175,22 @@ document.addEventListener("DOMContentLoaded", () => {
   async function handleRegister(event) {
     const button = event.target;
     const activity = button.getAttribute("data-activity");
-    const email = document.getElementById("email").value.trim();
+    const emailInput = document.getElementById("email");
+    const email = emailInput.value.trim();
 
     if (!email) {
       messageDiv.textContent = "Please enter your student email at the top first.";
+      messageDiv.className = "error";
+      messageDiv.classList.remove("hidden");
+      setTimeout(() => messageDiv.classList.add("hidden"), 5000);
+      return;
+    }
+    if (!emailInput.checkValidity()) {
+      // Trigger built-in browser validation UI (if available)
+      if (typeof emailInput.reportValidity === "function") {
+        emailInput.reportValidity();
+      }
+      messageDiv.textContent = "Please enter a valid student email address at the top first.";
       messageDiv.className = "error";
       messageDiv.classList.remove("hidden");
       setTimeout(() => messageDiv.classList.add("hidden"), 5000);
