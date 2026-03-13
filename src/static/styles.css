@@ -198,3 +198,65 @@ footer {
   padding: 20px;
   color: #666;
 }
+
+/* My Activities section */
+#my-activities-section {
+  margin-top: 20px;
+}
+
+#my-activities-section hr {
+  margin-bottom: 15px;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+#my-activities-section h4 {
+  margin-bottom: 6px;
+  color: #1a237e;
+}
+
+.my-activities-hint {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+#my-activities-btn {
+  font-size: 14px;
+  padding: 7px 12px;
+  margin-bottom: 12px;
+}
+
+.my-activity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  background-color: #f9f9f9;
+  flex-wrap: wrap;
+}
+
+.my-activity-item strong {
+  flex: 1 1 120px;
+  color: #0066cc;
+}
+
+.my-activity-item span {
+  flex: 2 1 160px;
+  font-size: 13px;
+  color: #555;
+}
+
+.my-unregister-btn {
+  font-size: 13px;
+  padding: 5px 10px;
+  background-color: #c62828;
+}
+
+.my-unregister-btn:hover {
+  background-color: #b71c1c;
+}

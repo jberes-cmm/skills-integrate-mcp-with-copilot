@@ -3,6 +3,60 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+  const myActivitiesBtn = document.getElementById("my-activities-btn");
+  const myActivitiesList = document.getElementById("my-activities-list");
+
+  // Handle "View My Activities" lookup
+  myActivitiesBtn.addEventListener("click", async () => {
+    const email = document.getElementById("email").value.trim();
+    if (!email) {
+      myActivitiesList.innerHTML = "<p class='error'>Please enter your email above first.</p>";
+      myActivitiesList.classList.remove("hidden");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/activities/student/${encodeURIComponent(email)}`);
+      const enrolled = await response.json();
+      const entries = Object.entries(enrolled);
+
+      if (entries.length === 0) {
+        myActivitiesList.innerHTML = "<p><em>You are not signed up for any activities yet.</em></p>";
+      } else {
+        myActivitiesList.innerHTML = entries
+          .map(
+            ([name, details]) =>
+              `<div class="my-activity-item">
+                <strong>${name}</strong>
+                <span>${details.schedule}</span>
+                <button class="my-unregister-btn" data-activity="${name}" data-email="${email}">Unregister</button>
+              </div>`
+          )
+          .join("");
+
+        myActivitiesList.querySelectorAll(".my-unregister-btn").forEach((btn) => {
+          btn.addEventListener("click", async (e) => {
+            const activity = e.target.getAttribute("data-activity");
+            const studentEmail = e.target.getAttribute("data-email");
+            const res = await fetch(
+              `/activities/${encodeURIComponent(activity)}/unregister?email=${encodeURIComponent(studentEmail)}`,
+              { method: "DELETE" }
+            );
+            if (res.ok) {
+              fetchActivities();
+              myActivitiesBtn.click(); // refresh the list
+            }
+          });
+        });
+      }
+
+      myActivitiesList.classList.remove("hidden");
+    } catch (error) {
+      myActivitiesList.innerHTML = "<p class='error'>Failed to load your activities.</p>";
+      myActivitiesList.classList.remove("hidden");
+      console.error("Error fetching student activities:", error);
+    }
+  });
 
   // Function to fetch activities from API
   async function fetchActivities() {

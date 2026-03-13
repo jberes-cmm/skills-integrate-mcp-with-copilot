@@ -110,6 +110,17 @@ def signup_for_activity(activity_name: str, email: str):
     return {"message": f"Signed up {email} for {activity_name}"}
 
 
+@app.get("/activities/student/{email}")
+def get_student_activities(email: str):
+    """Get all activities a student is signed up for"""
+    enrolled = {
+        name: details
+        for name, details in activities.items()
+        if email in details["participants"]
+    }
+    return enrolled
+
+
 @app.delete("/activities/{activity_name}/unregister")
 def unregister_from_activity(activity_name: str, email: str):
     """Unregister a student from an activity"""
