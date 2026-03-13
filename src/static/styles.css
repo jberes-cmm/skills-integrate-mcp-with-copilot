@@ -30,15 +30,9 @@ header h1 {
 
 main {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
   gap: 30px;
-  justify-content: center;
-}
-
-@media (min-width: 768px) {
-  main {
-    grid-template-columns: 2fr 1fr;
-  }
 }
 
 section {
@@ -47,7 +41,22 @@ section {
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 500px;
+}
+
+#email-bar {
+  max-width: 600px;
+}
+
+#activities-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+@media (max-width: 600px) {
+  #activities-list {
+    grid-template-columns: 1fr;
+  }
 }
 
 section h3 {
@@ -58,11 +67,12 @@ section h3 {
 }
 
 .activity-card {
-  margin-bottom: 15px;
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
 }
 
 .activity-card h4 {
@@ -197,6 +207,28 @@ footer {
   margin-top: 30px;
   padding: 20px;
   color: #666;
+}
+
+.register-btn {
+  margin-top: auto;
+  width: 100%;
+  background-color: #0066cc;
+  font-size: 14px;
+  padding: 9px 12px;
+}
+
+.register-btn:hover:not(:disabled) {
+  background-color: #0052a3;
+}
+
+.register-btn:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.availability.full {
+  color: #c62828;
+  font-weight: bold;
 }
 
 /* My Activities section */
