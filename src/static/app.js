@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
   const activitiesList = document.getElementById("activities-list");
-  const activitySelect = document.getElementById("activity");
-  const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
   const myActivitiesBtn = document.getElementById("my-activities-btn");
   const myActivitiesList = document.getElementById("my-activities-list");
@@ -72,10 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const activityCard = document.createElement("div");
         activityCard.className = "activity-card";
 
-        const spotsLeft =
-          details.max_participants - details.participants.length;
+        const spotsLeft = details.max_participants - details.participants.length;
+        const isFull = spotsLeft === 0;
 
-        // Create participants HTML with delete icons instead of bullet points
+        // Create participants HTML with delete icons
         const participantsHTML =
           details.participants.length > 0
             ? `<div class="participants-section">
@@ -95,22 +93,20 @@ document.addEventListener("DOMContentLoaded", () => {
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <p class="availability${isFull ? ' full' : ''}"><strong>Availability:</strong> ${spotsLeft} spots left</p>
           <div class="participants-container">
             ${participantsHTML}
           </div>
+          <button class="register-btn" data-activity="${name}"${isFull ? ' disabled' : ''}>${isFull ? 'Activity Full' : 'Register Student'}</button>
         `;
 
         activitiesList.appendChild(activityCard);
-
-        // Add option to select dropdown
-        const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
-        activitySelect.appendChild(option);
       });
 
-      // Add event listeners to delete buttons
+      // Add event listeners
+      document.querySelectorAll(".register-btn").forEach((button) => {
+        button.addEventListener("click", handleRegister);
+      });
       document.querySelectorAll(".delete-btn").forEach((button) => {
         button.addEventListener("click", handleUnregister);
       });
@@ -164,31 +160,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Handle form submission
-  signupForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
+  // Handle per-card registration
+  async function handleRegister(event) {
+    const button = event.target;
+    const activity = button.getAttribute("data-activity");
+    const email = document.getElementById("email").value.trim();
 
-    const email = document.getElementById("email").value;
-    const activity = document.getElementById("activity").value;
+    if (!email) {
+      messageDiv.textContent = "Please enter your student email at the top first.";
+      messageDiv.className = "error";
+      messageDiv.classList.remove("hidden");
+      setTimeout(() => messageDiv.classList.add("hidden"), 5000);
+      return;
+    }
 
     try {
       const response = await fetch(
-        `/activities/${encodeURIComponent(
-          activity
-        )}/signup?email=${encodeURIComponent(email)}`,
-        {
-          method: "POST",
-        }
+        `/activities/${encodeURIComponent(activity)}/signup?email=${encodeURIComponent(email)}`,
+        { method: "POST" }
       );
-
       const result = await response.json();
 
       if (response.ok) {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
-        signupForm.reset();
-
-        // Refresh activities list to show updated participants
         fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
@@ -196,18 +191,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       messageDiv.classList.remove("hidden");
-
-      // Hide message after 5 seconds
-      setTimeout(() => {
-        messageDiv.classList.add("hidden");
-      }, 5000);
+      setTimeout(() => messageDiv.classList.add("hidden"), 5000);
     } catch (error) {
-      messageDiv.textContent = "Failed to sign up. Please try again.";
+      messageDiv.textContent = "Failed to register. Please try again.";
       messageDiv.className = "error";
       messageDiv.classList.remove("hidden");
-      console.error("Error signing up:", error);
+      console.error("Error registering:", error);
     }
-  });
+  }
 
   // Initialize app
   fetchActivities();

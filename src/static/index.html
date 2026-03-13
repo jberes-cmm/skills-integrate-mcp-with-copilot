@@ -13,30 +13,12 @@
     </header>
 
     <main>
-      <section id="activities-container">
-        <h3>Available Activities</h3>
-        <div id="activities-list">
-          <!-- Activities will be loaded here -->
-          <p>Loading activities...</p>
-        </div>
-      </section>
-
-      <section id="signup-container">
+      <section id="email-bar">
         <h3>Sign Up for an Activity</h3>
-        <form id="signup-form">
-          <div class="form-group">
-            <label for="email">Student Email:</label>
-            <input type="email" id="email" required placeholder="your-email@mergington.edu" />
-          </div>
-          <div class="form-group">
-            <label for="activity">Select Activity:</label>
-            <select id="activity" required>
-              <option value="">-- Select an activity --</option>
-              <!-- Activity options will be loaded here -->
-            </select>
-          </div>
-          <button type="submit">Sign Up</button>
-        </form>
+        <div class="form-group">
+          <label for="email">Student Email:</label>
+          <input type="email" id="email" placeholder="your-email@mergington.edu" />
+        </div>
         <div id="message" class="hidden"></div>
 
         <div id="my-activities-section">
@@ -45,6 +27,14 @@
           <p class="my-activities-hint">Enter your email above and click to see your enrollments.</p>
           <button id="my-activities-btn" type="button">View My Activities</button>
           <div id="my-activities-list" class="hidden"></div>
+        </div>
+      </section>
+
+      <section id="activities-container">
+        <h3>Available Activities</h3>
+        <div id="activities-list">
+          <!-- Activities will be loaded here -->
+          <p>Loading activities...</p>
         </div>
       </section>
     </main>
