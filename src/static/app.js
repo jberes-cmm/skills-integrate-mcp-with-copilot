@@ -71,7 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
         activityCard.className = "activity-card";
 
         const spotsLeft = details.max_participants - details.participants.length;
-        const isFull = spotsLeft === 0;
+        const isFull = spotsLeft <= 0;
+        const displayedSpotsLeft = Math.max(0, spotsLeft);
 
         // Create participants HTML with delete icons
         const participantsHTML =
@@ -93,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p class="availability${isFull ? ' full' : ''}"><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <p class="availability${isFull ? ' full' : ''}"><strong>Availability:</strong> ${displayedSpotsLeft} spots left</p>
           <div class="participants-container">
             ${participantsHTML}
           </div>
